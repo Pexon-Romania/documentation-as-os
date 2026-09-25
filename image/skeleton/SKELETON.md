@@ -43,7 +43,8 @@ memory/  (or the runtime's native memory)   ← durable *why* across sessions
 - **Minimum for the stage — THIS RULE WINS over the tree above** — create only what the project needs now; the loop adds the rest. Optional subsets: the **support-pack** when a support audience exists; the **registers** (known-limitations · bugs · releases · faq) on their first real entry. A tiny project starts with overview · areas-map · the delivery trio · memory.
 - **Routing:** a user-facing AI is pointed at `docs/product/` only — never engineering, delivery, or the constitution.
 - **Registers carry open items only** — `known-limitations`, `bugs`, `doc-debt`: resolved items are removed.
-- **`doc-debt.md`** is the graceful-enforcement ledger — skipped doc updates land here, the `SessionStart` hook surfaces them, `/reconcile-docs` clears them.
+- **`doc-debt.md`** is the graceful-enforcement ledger — skipped doc updates land here, the
+  `SessionStart` hook surfaces them, and the `reconcile-docs` skill clears them.
 - **Board = index, docs = records** — `STATUS` and registers stay scannable; heavy detail lives in the linked docs they point to.
 - **Never written anywhere here:** credentials, hostnames, PII, the internal way-of-working.
 

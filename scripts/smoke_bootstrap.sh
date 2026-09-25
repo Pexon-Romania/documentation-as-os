@@ -17,6 +17,8 @@ for f in VERSION MANIFEST.json BOOTSTRAP.md UPGRADE.md INSTANCE-CONTRACT.md \
          CONSTITUTION.template.md SELF-ENFORCEMENT.md \
          skeleton/SKELETON.md skeleton/STATUS.template.md skeleton/doc-debt.template.md \
          hooks/settings.template.json hooks/session-start.sh hooks/post-edit-docs.sh hooks/stop-gate.sh \
+         hooks/codex/hooks.template.json hooks/codex/common.py hooks/codex/session_start.py \
+         hooks/codex/post_edit_docs.py hooks/codex/stop_gate.py \
          system/validate_docs.template.py system/validate-docs.template.yml \
          system/CODEOWNERS.template system/ruleset.template.json system/GOVERNANCE-RUNBOOK.md; do
   [ -f "$IMG/$f" ] || fail "image incomplete: image/$f missing"
@@ -30,10 +32,11 @@ done
 grep -q '"files"' "$IMG/MANIFEST.json" || fail "image/MANIFEST.json has no files map"
 DOOR="https://github.com/flaviusmoldovan-pexon/documentation-as-os"
 grep -q "$DOOR" "$IMG/BOOTSTRAP.md" || fail "BOOTSTRAP.md carries no upstream door"
+[ "$(grep -c 'Which agent runtime' "$IMG/BOOTSTRAP.md")" -eq 3 ] || fail "every bootstrap profile must ask Claude Code / Codex / both"
 echo "smoke 0/3: image complete"
 
-# ── Part 1 · solo-profile mechanical install (what STEP 1-6 produce, scripted) ──
-S="$W/solo"; mkdir -p "$S/docs/delivery" "$S/.claude/hooks"
+# ── Part 1 · solo-profile BOTH-runtimes install (what STEP 1-6 produce, scripted) ──
+S="$W/solo"; mkdir -p "$S/docs/delivery" "$S/.claude/hooks" "$S/.codex/hooks"
 sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/CONSTITUTION.template.md" > "$S/CLAUDE.md"
 VER="$(tr -d '[:space:]' < "$IMG/VERSION")"
 { printf '\n## OS report-back (standing)\nOS-level findings: draft the upstream issue at %s/issues/new (os-bug | improvement | suggestion), include the image version + profile from the footer stamp; un-filed drafts live under "## OS findings (to file upstream)" in STATUS.\n' "$DOOR"
@@ -42,8 +45,12 @@ sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/skeleton/STATUS.template.md" > "$S/docs/deliv
 sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/skeleton/doc-debt.template.md" > "$S/docs/delivery/doc-debt.md"
 for s in scope-lock workstream handover reconcile-docs gating; do
   mkdir -p "$S/.claude/skills/$s"; cp "$IMG/skills/$s/SKILL.md" "$S/.claude/skills/$s/"
+  mkdir -p "$S/.agents/skills/$s"; cp "$IMG/skills/$s/SKILL.md" "$S/.agents/skills/$s/"
 done
 cp "$IMG"/hooks/*.sh "$S/.claude/hooks/"; chmod +x "$S/.claude/hooks/"*.sh
+cp "$IMG"/hooks/codex/*.py "$S/.codex/hooks/"
+cp "$IMG/hooks/codex/hooks.template.json" "$S/.codex/hooks.json"
+git init -q "$S"
 echo strict > "$S/.claude/os-mode"
 cp "$IMG/MANIFEST.json" "$S/docs/OS-MANIFEST.lock"
 grep -q '{{' "$S/CLAUDE.md" && fail "solo: unfilled placeholder survived in CLAUDE.md"
@@ -51,9 +58,28 @@ grep -q "profile: solo" "$S/CLAUDE.md" || fail "solo: stamp missing"
 grep -q "$DOOR/issues" "$S/CLAUDE.md" || fail "solo: door missing"
 grep -q '"files"' "$S/docs/OS-MANIFEST.lock" || fail "solo: lock missing/empty"
 [ -x "$S/.claude/hooks/stop-gate.sh" ] || fail "solo: hooks not executable"
+python3 -m json.tool "$S/.codex/hooks.json" >/dev/null || fail "solo: Codex hooks.json invalid"
+[ -f "$S/.codex/hooks/stop_gate.py" ] || fail "solo: Codex Stop handler missing"
+[ -f "$S/.agents/skills/scope-lock/SKILL.md" ] || fail "solo: Codex skills missing"
 # the stop-gate must run against the fresh instance and allow a clean stop (no debt)
 ( cd "$S" && CLAUDE_PROJECT_DIR="$S" bash .claude/hooks/stop-gate.sh </dev/null >/dev/null 2>&1 ) || fail "solo: stop-gate errored on a clean instance"
-echo "smoke 1/3: solo instantiation OK (stamp + lock + door + hooks live)"
+# Codex adapter lifecycle: boot context, edit nudge, relaxed debt, strict block once.
+BOOT="$(cd "$S/docs" && printf '{"cwd":"%s","source":"startup"}' "$S" | python3 "$(git rev-parse --show-toplevel)/.codex/hooks/session_start.py")"
+echo "$BOOT" | grep -q "STATUS" || fail "solo: Codex SessionStart did not inject STATUS"
+CODEX_EDIT_EVENT="{\"cwd\":\"$S\",\"tool_input\":{\"command\":\"*** Begin Patch\\n*** Update File: src/app.py\\n*** End Patch\"}}"
+NUDGE="$(printf '%s' "$CODEX_EDIT_EVENT" | python3 "$S/.codex/hooks/post_edit_docs.py")"
+echo "$NUDGE" | grep -q "docs-part-of-done" || fail "solo: Codex PostToolUse did not nudge"
+echo relaxed > "$S/.claude/os-mode"
+printf '{"cwd":"%s","source":"compact"}' "$S" | python3 "$S/.codex/hooks/session_start.py" >/dev/null
+grep -qx 'relaxed' "$S/.claude/os-mode" || fail "solo: Codex compaction incorrectly reset the current session's mode"
+printf '{"cwd":"%s","tool_input":{"file_path":"src/app.py"}}' "$S" | python3 "$S/.codex/hooks/post_edit_docs.py" >/dev/null
+grep -q '^- \[ \] src/app.py' "$S/docs/delivery/doc-debt.md" || fail "solo: Codex relaxed edit did not log debt"
+echo strict > "$S/.claude/os-mode"
+if printf '{"cwd":"%s","stop_hook_active":false}' "$S" | python3 "$S/.codex/hooks/stop_gate.py" >/dev/null 2>&1; then
+  fail "solo: Codex strict Stop did not block on open debt"
+fi
+printf '{"cwd":"%s","stop_hook_active":true}' "$S" | python3 "$S/.codex/hooks/stop_gate.py" >/dev/null || fail "solo: Codex Stop loop guard failed"
+echo "smoke 1/3: solo BOTH instantiation OK (stamp + lock + door + Claude/Codex adapters)"
 
 # ── Part 2 · team-profile synthetic instance passes its own validator ──────────
 T="$W/team"; mkdir -p "$T"/{scripts,app-documentation,dependencies,support,leaders,delivery/specs,delivery/incidents,.github/workflows}

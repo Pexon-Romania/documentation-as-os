@@ -27,7 +27,7 @@ agents, always current — is the documentation. So it gets promoted, literally:
 | **Process table** | live state: where we are · next · blocked | `STATUS.md` |
 | **Persistent storage** | the durable *why*, survives any reset | `memory/` + `decisions/` |
 | **Scheduler** | the delivery loop (admit → run → retire work) | the method itself |
-| **Policy enforcement** | hooks + human gates (solo) · validator + CI + rulesets (team) | `.claude/hooks/` · CI |
+| **Policy enforcement** | hooks + human gates (solo) · validator + CI + rulesets (team) | `.claude/hooks/` or `.codex/hooks/` · CI |
 | **syslog** | the learnings inbox — friction appended unprompted | `LEARNINGS.md` / issues |
 | **The installer** | one prompt boots the image into any repo | `image/BOOTSTRAP.md` |
 
@@ -84,10 +84,12 @@ your-repo/
 │   │   └── decisions/         ADRs — the why (append-only; supersede, never rewrite)
 │   └── OS-MANIFEST.lock       sha256 of what you installed from → upgrades diff against it
 ├── memory/                    the durable why across sessions
-└── .claude/
-    ├── skills/                /scope-lock · /workstream · /handover · /reconcile-docs · /gating
-    ├── hooks/                 session-start · post-edit-docs · stop-gate
-    └── os-mode                strict | relaxed  (auto-resets to strict every session)
+├── .claude/                   Claude adapter (when selected) + shared os-mode
+│   ├── skills/                /scope-lock · /workstream · /handover · /reconcile-docs · /gating
+│   ├── hooks/                 session-start · post-edit-docs · stop-gate
+│   └── os-mode                strict | relaxed  (shared; auto-resets every session)
+├── .agents/skills/            Codex skills when selected ($scope-lock etc.)
+└── .codex/                    Codex hooks.json + Python handlers when selected
 ```
 
 ## 1.5 A session's life — where the gates sit
@@ -317,7 +319,8 @@ python3 -c "import json;print(json.load(open('docs/OS-MANIFEST.lock'))['version'
 **You see:** the **footer stamp** (image version · profile · date · upstream) · the
 **report-back door** section · the lock printing the image version you just installed.
 **Five minutes in:** the repo boots from a constitution, carries its own state, knows its
-version, and knows how to report back. `solo` adds the five skills and three enforcement hooks;
+version, and knows how to report back. `solo` asks for Claude Code, Codex, or both, then adds
+the five skills and three enforcement hooks for the selected runtime adapter(s);
 `team` adds the validator, CI, and governance — same file, different block in the same launcher.
 
 ## Demo B — the loop with receipts (browser, 3 minutes)

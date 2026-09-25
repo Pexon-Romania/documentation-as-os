@@ -34,7 +34,8 @@ Don't start work until you know the current state and the task. *(The `SessionSt
 
 ## 4 · How we build — the loop
 - Treat a non-trivial request as a **hypothesis, not a spec.** Cross-check it against the plan and the real code *before* building.
-- **Lock scope before code** — what's in / what's deferred, in writing, signed off. *(`/scope-lock`)*
+- **Lock scope before code** — what's in / what's deferred, in writing, signed off. *(run the
+  `scope-lock` skill: `/scope-lock` in Claude Code, `$scope-lock` in Codex)*
 - **Re-run the loop** when priorities or requirements move; record the change, don't absorb it silently.
 - A workstream that needs its own space gets its own subfolder. *(`/workstream`)*
 
@@ -43,7 +44,10 @@ A change isn't complete until the **code** works, the **docs** reflect it, and t
 - When you change a documented surface, **update its doc in the SAME change** — you have the context now.
 - Stamp `Last verified: <date>` on docs you touch; tag uncertain claims `[VERIFIED]` / `[INFERRED]` / `[NEEDS-CHECK]`.
 - **Corrections are corpus-wide:** before fixing a wrong claim, grep for its phrasing and fix every echo in the same change; name a doc error *"this doc was wrong"*, never *"this is no longer true."*
-- **The OS holds you to this** (it won't close the session on stale docs). When reality demands speed, say **"relax the gating"** (`/gating relax`) — it yields, **logs the skip as doc-debt**, and helps you reconcile later (`/reconcile-docs`). Relaxing is loud and expires; it never becomes silent drift.
+- **The OS holds you to this** (it won't close the session on stale docs). When reality demands
+  speed, say **"relax the gating"** (run the `gating relax` skill) — it yields, **logs the skip
+  as doc-debt**, and helps you reconcile later (`reconcile-docs`). Relaxing is loud and expires;
+  it never becomes silent drift.
 
 ## 6 · Source of truth & deploy
 - One **source of truth** for the code (`{{SOURCE_OF_TRUTH}}`); everything else is a copy it feeds.
@@ -55,7 +59,8 @@ A change isn't complete until the **code** works, the **docs** reflect it, and t
 Update `{{STATUS_DOC}}` (where we are + next step), append a session note **to memory (`## Session log`)**, record any decision in memory (**append-only — never lose the *why***), and clear or log any doc-debt — **a forward-looking commitment ("do X next session") is logged as a `- [ ]` doc-debt item *when you write it*, so the gates track it, not your memory.** **If it mattered this session, it's written before the session ends.** *(The `Stop` hook checks this — gracefully.)*
 
 ## 8 · Locked decisions (do not silently change)
-> To change one, it's deliberate — never silent: record it in a **superseding ADR** and update this list with a pointer to it (`/scope-lock` handles the ritual).
+> To change one, it's deliberate — never silent: record it in a **superseding ADR** and update
+> this list with a pointer to it (the `scope-lock` skill handles the ritual).
 
 {{LOCKED_DECISIONS — the architecture/tooling choices that are final, so they aren't relitigated. e.g. "Frontend: <framework>. Backend: <framework>. DB: <db>. Auth: <method>."}}
 

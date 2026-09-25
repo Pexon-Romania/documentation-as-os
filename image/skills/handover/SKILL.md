@@ -3,7 +3,9 @@ name: handover
 description: Produce or refresh the handover doc-set — built fresh FROM the code, layered and grounded. Use to hand the project (or a part) to a new maintainer or the support team.
 ---
 
-# /handover
+# handover
+
+Invoke as `/handover` in Claude Code or `$handover` in Codex.
 
 Build the handover set **from the code**, not from stale notes.
 

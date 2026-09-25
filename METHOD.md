@@ -81,9 +81,9 @@ with an AI agent as the primary engineering partner — then generalized, packag
 ## Adopting is a way of working, not a tool
 
 The durable principle — *externalized, version-controlled, always-current knowledge for humans
-and agents alike* — is runtime-agnostic. The image here runs on Claude Code today; swap the
-runtime and the roles travel (constitution / live state / memory are roles any toolchain can
-fill). Three profiles scale it to your stage — `poc` (five minutes, no machinery) · `solo` ·
+and agents alike* — is runtime-agnostic. The image here runs on Claude Code and Codex today;
+swap the runtime and the roles travel (constitution / live state / memory are roles any
+toolchain can fill). Three profiles scale it to your stage — `poc` (five minutes, no machinery) · `solo` ·
 `team` (full governance) — and a POC that grows up **upgrades its profile, never re-adopts**.
 
 → **Install it:** [`GETTING-STARTED.md`](GETTING-STARTED.md) · what upgrades mean:

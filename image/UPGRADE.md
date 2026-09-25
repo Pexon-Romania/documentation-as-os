@@ -11,7 +11,8 @@
 
 1. Get the **latest Release** of `flaviusmoldovan-pexon/documentation-as-os` (record the tag) and place its
    `image/` beside your repo.
-2. Open Claude Code in your instance's repo and paste the prompt. It reports before it writes.
+2. Open a runtime already named by the instance (`Claude Code` or `Codex`) and paste the prompt.
+   It reports before it writes.
 
 ## The prompt
 
@@ -28,6 +29,9 @@ STEP 0 · Establish the three points.
       "Impact on existing instances" line. List what applies to THIS instance's profile.
   No stamp or lock found? This is a PRE-VERSIONED instance — switch to the §pre-versioned
   procedure below instead of this one.
+  For a solo instance, inventory installed runtime adapters (`.claude/`, `.codex/`, or both).
+  If the new Release adds an adapter and none is installed, ASK whether to keep the current
+  runtime, add Codex/Claude Code, or install both; never infer a runtime migration.
 
 STEP 1 · Classify every image file (the three-way diff). For each path in the NEW
   image/MANIFEST.json, compare: new-hash vs lock-hash vs the sha256 of the corresponding
@@ -51,8 +55,10 @@ STEP 2 · Apply. Mechanical updates first (re-fill the same placeholders from th
   sections merge in; a changed rule that conflicts with a local locked decision is MINE to
   decide — flag it, don't pick.
 
-STEP 3 · Re-verify the instance. Solo/poc: constitution boots, skeleton intact, skills/hooks
-  still executable, os-mode present, no unfilled {{PLACEHOLDER}}. Team: run
+STEP 3 · Re-verify the instance. Solo/poc: constitution boots in every selected runtime,
+  skeleton intact, selected skills/hooks still load, shared os-mode present, no unfilled
+  {{PLACEHOLDER}}. For Codex, `/hooks` must show the current definitions reviewed and trusted;
+  changed definitions require review again. Team: run
   scripts/validate_docs.py — PASS with 0 fails; if the new image changed the validator template,
   re-apply the seven knobs to the new template rather than diffing my old copy line-by-line.
 

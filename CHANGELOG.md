@@ -6,6 +6,12 @@
 
 ## Unreleased
 
+- **Codex runtime adapter (maintainer-run evidence, 2026-09-25):** operating the method from
+  Codex exposed that the solo image could specify the portable hook contract but only install
+  Claude Code wiring. The bootstrap now asks `Claude Code` / `Codex` / `both` without inferring;
+  Codex gets repo-local `SessionStart`, `PostToolUse(Edit|Write)`, and graceful `Stop` handlers,
+  `.agents/skills`, explicit `/hooks` trust, and one shared enforcement mode. The existing
+  Claude paths and semantics remain intact; other harnesses remain evidence-counted runtime ports.
 - **Post-launch audit fixes:** WALKTHROUGH's demo commands are now tagless (always the latest
   Release — no pin to go stale); README links the tour; MAINTAINERS carries the applied
   governance record and an honest census note (the CLI code-search instrument measured

@@ -3,7 +3,9 @@ name: scope-lock
 description: Run the front of the delivery loop — turn a request into a signed, buildable scope. Use before building anything non-trivial, and again whenever the request changes mid-flight.
 ---
 
-# /scope-lock
+# scope-lock
+
+Invoke as `/scope-lock` in Claude Code or `$scope-lock` in Codex.
 
 Turn the request into a **locked scope before any code**.
 

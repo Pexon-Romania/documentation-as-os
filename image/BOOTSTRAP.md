@@ -14,8 +14,9 @@
    image alone; the source archive works too). **Record the tag you took.** Never install from
    a copied folder or `main` — version-truth lives in Releases.
 2. Place the `image/` folder at/beside the target repo root.
-3. Open **Claude Code** in the repo and paste the profile prompt below. Answer its questions
-   (placeholders; anything irreversible).
+3. Open **Claude Code or Codex** in the repo and paste the profile prompt below. The prompt
+   asks which runtime to wire (`Claude Code`, `Codex`, or `both`) before it writes runtime files;
+   answer its remaining questions (placeholders; anything irreversible).
 4. It installs, verifies, **stamps the instance** (version + profile in the constitution
    footer, `MANIFEST.lock` for future upgrades, the upstream report-back door), then removes
    the installer folder.
@@ -30,9 +31,15 @@ You are bootstrapping the "documentation-as-os" POC PROFILE into THIS repository
 image is in ./image/ (or the path I give you). Work carefully, ASK before anything
 irreversible, VERIFY — don't assume.
 
-STEP 1 · Constitution-lite. If ./CLAUDE.md (or AGENTS.md) already exists, MERGE — ask me
+STEP 0 · Runtime. ASK me: "Which agent runtime should this instance support: Claude Code,
+  Codex, or both?" Do not infer the answer. POC has no hooks, but the answer selects the boot
+  file: Claude Code -> CLAUDE.md; Codex -> AGENTS.md; both -> AGENTS.md is canonical and
+  CLAUDE.md imports it with @AGENTS.md as line 1. Never create two divergent constitutions.
+
+STEP 1 · Constitution-lite. At the runtime-selected boot location, if ./CLAUDE.md or AGENTS.md
+  already exists, MERGE — ask me
   first, never clobber (platform-provisioned repo with CLAUDE.md = an @AGENTS.md import: the
-  constitution takes CLAUDE.md, keep @AGENTS.md as its first line, never edit AGENTS.md). Otherwise create ./CLAUDE.md as a SHORT constitution from
+  constitution takes CLAUDE.md, keep @AGENTS.md as its first line, never edit AGENTS.md). Otherwise create the selected boot file as a SHORT constitution from
   image/CONSTITUTION.template.md keeping only: §1 boot (read this file + STATUS every
   session), §2 critical rules, §5 done = code + docs in sync (manual — no hooks in this
   profile), §7 write-out before you stop. Fill every {{PLACEHOLDER}} you keep; ask for what
@@ -85,10 +92,18 @@ STEP 0 · Detect mode.
     image/UPGRADE.md; a broken install is repaired by hand against the lock.
   State which mode and why before proceeding.
 
+  Then ASK me exactly: "Which agent runtime should I wire: Claude Code, Codex, or both?"
+  Do not infer from the harness running this bootstrap. Record the answer for STEPS 1, 3, 4,
+  7, and 8.
+
 STEP 1 · Constitution.
-  If ./CLAUDE.md (or AGENTS.md) ALREADY EXISTS: do NOT overwrite — MERGE the OS rules in (or
+  Select the boot shape from my runtime answer: Claude Code -> CLAUDE.md; Codex -> AGENTS.md;
+  both -> AGENTS.md is the canonical constitution and CLAUDE.md keeps @AGENTS.md as line 1.
+  Never create two divergent constitutions. If the selected ./CLAUDE.md or AGENTS.md ALREADY
+  EXISTS: do NOT overwrite — MERGE the OS rules in (or
   append a clearly-marked "documentation-as-os" section) and ASK me first (real existing
-  repos usually have one). Otherwise copy image/CONSTITUTION.template.md -> ./CLAUDE.md.
+  repos usually have one). Otherwise copy image/CONSTITUTION.template.md to the selected
+  canonical boot file (and create the import-only CLAUDE.md for `both`).
   Fill every {{PLACEHOLDER}}: infer what you safely can from the repo (name, stack,
   source-of-truth, environments); ASK me for what you can't (locked decisions, domain rules,
   forbidden ops). Do not invent. DELETE the template's instructional header comment — installer
@@ -99,6 +114,9 @@ STEP 1 · Constitution.
   AGENTS.md, it is platform truth); seed §8 locked decisions from the paved-road stack (decided
   by the platform, pointer not restatement) and fold the platform's never-touch rules into §9
   (CI workflow jobs/triggers/refs · platform config keys · compliance descriptors · migration history).
+  If my runtime answer includes Codex but that platform AGENTS.md must remain verbatim, STOP and
+  surface the conflict: do not claim a full Codex install until the platform owner provides an
+  approved Codex instruction path or permits the OS constitution to be included.
 
 STEP 2 · Skeleton.
   Scaffold the doc tree per image/skeleton/SKELETON.md (docs/product, docs/engineering,
@@ -109,17 +127,25 @@ STEP 2 · Skeleton.
   skeleton/adr.template.md. FRESH = guided stubs; EXISTING = filled in STEP 5.
 
 STEP 3 · Skills.
-  Copy image/skills/*/SKILL.md -> .claude/skills/<name>/SKILL.md
-  (scope-lock, workstream, handover, reconcile-docs, gating).
+  Install the five skills (scope-lock, workstream, handover, reconcile-docs, gating) for the
+  selected runtime(s): Claude Code -> .claude/skills/<name>/SKILL.md; Codex ->
+  .agents/skills/<name>/SKILL.md; both -> both locations. Claude invokes them as `/name`;
+  Codex invokes them as `$name`.
 
 STEP 4 · Hooks (enforcement). ASK before writing settings.
-  - MERGE image/hooks/settings.template.json into .claude/settings.json (or
-    settings.local.json if the repo uses that) — add the hooks + ask-rules WITHOUT clobbering
-    existing keys; ASK before writing.
-  - Copy image/hooks/*.sh -> .claude/hooks/ and chmod +x them.
-  - Create .claude/os-mode containing: strict
-  - VERIFY the hook + permission-rule syntax against the CURRENT Claude Code docs before
-    relying on it; fix any drift. Tune the ask: rules to THIS repo's real irreversible ops.
+  - Always create .claude/os-mode containing `strict`. It is the stable shared state even for a
+    Codex-only install; `both` must never have two enforcement-mode files.
+  - If the answer includes Claude Code: MERGE image/hooks/settings.template.json into
+    .claude/settings.json (or settings.local.json if the repo uses that) WITHOUT clobbering;
+    copy image/hooks/*.sh -> .claude/hooks/ and chmod +x them; verify current Claude hook and
+    permission syntax; tune `ask:` rules to this repo's irreversible operations.
+  - If the answer includes Codex: copy image/hooks/codex/{common.py,session_start.py,
+    post_edit_docs.py,stop_gate.py} -> .codex/hooks/ and copy
+    image/hooks/codex/hooks.template.json -> .codex/hooks.json WITHOUT clobbering an existing
+    hook config (merge matching event groups). Verify against the current official Codex hook
+    docs. Tell me Codex will skip project hooks until I review and trust them with `/hooks`;
+    do not claim they are live before that review. On Windows, add and test `commandWindows`
+    for every handler before relying on it.
 
 STEP 5 · EXISTING mode only — build the docs FROM the code.
   Read the actual code. Write the product + engineering bucket docs grounded in it (overview,
@@ -144,14 +170,16 @@ STEP 6 · Stamp + lock + door.
   stop-gate surface un-filed [OS] findings."
 
 STEP 7 · Start the loop.
-  NOTE: the skills + hooks you just installed activate on the NEXT Claude Code session (the
-  harness loads them at startup) — restart to make `/scope-lock` etc. and the hooks live. In
-  THIS session, run the scope-lock steps manually.
-  Run /scope-lock on the first real task. Update STATUS (where we are / next).
+  NOTE: restart every selected harness so it loads the skills + hooks. For Claude Code, verify
+  `/scope-lock`; for Codex, review/trust the hook definitions with `/hooks` and verify
+  `$scope-lock`. In THIS session, run the scope-lock steps manually. Run the selected runtime's
+  scope-lock skill on the first real task. Update STATUS (where we are / next).
 
 STEP 8 · Verify, then remove the installer.
-  Check: constitution + skeleton + skills + hooks in place, os-mode = strict, no unfilled
-  {{PLACEHOLDER}}, stamp/lock/door present. Then DELETE the image folder you installed from
+  Check: one canonical constitution + skeleton + the selected runtime skills/hooks in place,
+  os-mode = strict, no unfilled {{PLACEHOLDER}}, stamp/lock/door present. Exercise each selected
+  adapter: SessionStart injects state; a synthetic code edit produces a nudge; relaxed mode logs
+  debt; strict Stop blocks once and honors stop_hook_active. Then DELETE the image folder you installed from
   (ask me first if it sits inside this repo's tree) — a kept image copy becomes a
   silently-stale fork; upgrades come from the next Release via image/UPGRADE.md.
 
@@ -159,7 +187,8 @@ STEP 9 · Register (optional, zero-duty) + report — honestly.
   Offer me the prefilled adoption-registration link (the "Adopted" issue template at the
   upstream repo: instance name + profile + image version) — one click, estate view; skipping
   changes nothing. Then tell me: what you installed; every placeholder you filled vs. left
-  for me; the ask: rules you set; what you could NOT verify (hook syntax?); and what remains
+  for me; runtime choice; permissions/ask rules set; hook trust state; what you could NOT verify
+  (hook syntax or firing?); and what remains
   (migration backlog, validation). Label what's working vs. what's assumed-until-tested.
 ```
 
@@ -174,7 +203,10 @@ documentation source of truth. The system image is in <path-to>/image/ (system/ 
 Work carefully, ASK before anything irreversible, and VERIFY everything — two independent
 instruments for any does-X-exist conclusion; never conclude absence from truncated output.
 
-STEP 0 · Context. Ask me: the app repos this documents · the audience lines (default: leaders /
+STEP 0 · Context. ASK me first: "Which agent runtime will operate this docs repo: Claude Code,
+  Codex, or both?" Do not infer it. The team profile uses validator/CI governance rather than
+  solo lifecycle hooks, but runtime choice controls which boot path you verify. Then ask me:
+  the app repos this documents · the audience lines (default: leaders /
   support / app-documentation / dependencies / delivery — the shape that fits a user-facing
   product; LINES ARE AUDIENCES, NOT TOPICS: one line per reader type who arrives with different
   questions, so a platform or program home picks different lines — the metro rules stay, the map
@@ -217,7 +249,8 @@ STEP 6 · First content. Existing app → build the reference docs FROM THE CODE
   Then log your first LEARNINGS entry about this install — something always comes up, and the
   inbox working from day one is the point. Offer the human the prefilled adoption-registration
   link (the "Adopted" issue template at the upstream repo — optional, zero-duty). Finally:
-  DELETE the local image folder you installed from (never vendor it into the docs repo) —
+  Report the runtime choice and verify its boot file is active. Then DELETE the local image
+  folder you installed from (never vendor it into the docs repo) —
   upgrades come from the next Release via image/UPGRADE.md.
 ```
 

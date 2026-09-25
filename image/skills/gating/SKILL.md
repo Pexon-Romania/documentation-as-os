@@ -4,7 +4,9 @@ description: Control graceful enforcement — relax the hard gates for unpredict
 arguments: [mode]
 ---
 
-# /gating $mode
+# gating $mode
+
+Invoke as `/gating` in Claude Code or `$gating` in Codex.
 
 Control the OS's enforcement mode. `$mode` = `relax` | `strict` | `status`.
 
@@ -12,4 +14,6 @@ Control the OS's enforcement mode. `$mode` = `relax` | `strict` | `status`.
 - **`strict`** — set mode to `strict` (the default). Gates enforce.
 - **`status`** — report the current mode + the open doc-debt count.
 
-**Mechanism:** write `$mode` to the OS-mode file (`.claude/os-mode`); the hooks (`../hooks/`) read it. Relaxing **never disables the OS** — it degrades *block → guide* and keeps the receipts (the doc-debt register + `/reconcile-docs`).
+**Mechanism:** write `$mode` to the shared OS-mode file (`.claude/os-mode`); every installed
+runtime adapter reads it. Relaxing **never disables the OS** — it degrades *block → guide* and
+keeps the receipts (the doc-debt register + `reconcile-docs`).

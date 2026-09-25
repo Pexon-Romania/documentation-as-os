@@ -40,8 +40,9 @@ A POC that grows up **upgrades its profile in place** — it never re-adopts. Th
 [`image/BOOTSTRAP.md`](image/BOOTSTRAP.md).
 
 > **Runtime, honestly:** the *method* is runtime-agnostic ([`METHOD.md`](METHOD.md) §adopting);
-> **this image runs on Claude Code today.** On Copilot/Cursor/other? File a `runtime-port`
-> issue — that label is how demand for another runtime's image gets counted and prioritized.
+> the solo image ships adapters for **Claude Code, Codex, or both**. The bootstrap asks instead
+> of inferring. On Copilot/Cursor/another runtime, file a `runtime-port` issue — that label is
+> how demand gets counted and prioritized.
 
 ## What semver protects
 

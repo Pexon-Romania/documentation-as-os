@@ -28,13 +28,18 @@
   doc-debt; resets os-mode to strict) · **`PostToolUse(Edit|Write)`** (docs-part-of-done nudge;
   logs debt when relaxed) · **`Stop`** (won't-close-on-stale-docs: strict → block once,
   relaxed → remind; never loops).
+- Runtime adapters: Claude Code installs under **`.claude/hooks/`** with its settings merge;
+  Codex installs under **`.codex/hooks/`** with `.codex/hooks.json`; `both` installs both
+  adapters against the same documents and mode.
 - **`.claude/os-mode`** values: `strict` (default, auto-restored every session) · `relaxed`
-  (loud, debt-logged, expires).
-- Human gates are permission **`ask:`** rules, not hooks.
+  (loud, debt-logged, expires). The path remains shared for Claude, Codex, and `both`.
+- Human gates use the selected harness's native permission/approval layer, not a hook pretending
+  it can prompt the user.
 
 ### Skills (names + contracts)
-`/scope-lock` · `/workstream <name>` · `/handover` · `/reconcile-docs` ·
-`/gating <relax|strict|status>` — installed at `.claude/skills/<name>/SKILL.md`.
+`scope-lock` · `workstream <name>` · `handover` · `reconcile-docs` ·
+`gating <relax|strict|status>` — installed at `.claude/skills/<name>/SKILL.md` for Claude Code
+(`/name`) and `.agents/skills/<name>/SKILL.md` for Codex (`$name`).
 
 ### Validator contract
 - Exit semantics: **0 = PASS (warnings allowed) · 1 = FAIL (= the change is not done)**.
@@ -56,6 +61,9 @@
 - **Three profiles:** `poc` (constitution-lite + STATUS + CHANGELOG + the door) · `solo`
   (constitution + skeleton + skills + hooks) · `team` (shared repo + system layer + governance).
   Profile graduation never restarts an adoption.
+- Bootstrap runtime choice is explicit: **`Claude Code` · `Codex` · `both`**. The installer asks;
+  it never infers the answer from whichever agent happens to execute the prompt. A `both`
+  install has one canonical constitution and one shared enforcement mode.
 - Every bootstrap writes: the **image-version stamp** (constitution footer, append-only across
   upgrades), the **lock** — `docs/OS-MANIFEST.lock` (poc · solo) or `./OS-MANIFEST.lock` (team
   root) — the sha256 manifest instantiated from, and **the door** (the OS report-back section in
@@ -71,7 +79,7 @@ environment state."
 
 ## 2 · Internal (may change in a MINOR)
 Template wording and layout · skeleton file *contents* · validator internals (regexes, messages,
-implementation) · hook script internals (behavior contract above holds) · prompt phrasing in
+implementation) · runtime-adapter internals (behavior contract above holds) · prompt phrasing in
 BOOTSTRAP/UPGRADE · this repo's own docs structure · the `IMPACT_MAP`/`REQUIRED_FILES` example
 values.
 

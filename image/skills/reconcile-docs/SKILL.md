@@ -3,7 +3,9 @@ name: reconcile-docs
 description: Pay down doc-debt — the doc updates skipped while gating was relaxed. Use when the session-start surfaces debt, or anytime to square up.
 ---
 
-# /reconcile-docs
+# reconcile-docs
+
+Invoke as `/reconcile-docs` in Claude Code or `$reconcile-docs` in Codex.
 
 Square up the **doc-debt** logged while the gating was relaxed.
 
@@ -12,4 +14,5 @@ Square up the **doc-debt** logged while the gating was relaxed.
 3. **Remove the entry** once reconciled — registers carry open items only.
 4. Update `STATUS` (the open-doc-debt section).
 
-If the debt is large, `/scope-lock` the reconciliation itself so it's a tracked piece of work, not an open-ended cleanup.
+If the debt is large, run `scope-lock` on the reconciliation itself so it's a tracked piece of
+work, not an open-ended cleanup.

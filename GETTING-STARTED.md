@@ -10,8 +10,9 @@ its decisions, and enforce "done = code + docs in sync" gracefully** — for hum
 sessions alike. It installs *into your repo* and becomes yours; this repo only ships the image
 and receives your findings.
 
-**Requirements:** Claude Code (the image's runtime — other runtimes: file a `runtime-port`
-issue) · git · for the solo/team hooks, a bash on PATH (macOS/Linux native; Windows = Git Bash).
+**Requirements:** Claude Code and/or Codex for the solo runtime layer (other runtimes: file a
+`runtime-port` issue) · git · Python 3 for Codex hooks · for Claude hooks, bash on PATH
+(macOS/Linux native; Windows = Git Bash).
 
 ## 1 · Pick your profile
 
@@ -37,13 +38,14 @@ already-fixed problems; that's the whole reason Releases exist.
 
 ## 3 · Run the bootstrap — one prompt, your AI does the install
 
-Unzip so `image/` sits at/beside your repo root. Open **Claude Code** in your repo, open
+Unzip so `image/` sits at/beside your repo root. Open **Claude Code or Codex** in your repo, open
 [`image/BOOTSTRAP.md`](image/BOOTSTRAP.md), and paste **your profile's prompt**. It will:
 
 - detect fresh vs existing repo (existing → it builds the docs *from your code*, incrementally);
 - **merge** into any constitution you already have — never clobber — and ask before anything
   irreversible;
 - fill what it can infer and ask you the rest (locked decisions, forbidden ops);
+- ask which runtime to wire — **Claude Code, Codex, or both** — before installing runtime files;
 - **stamp the instance** (image version + profile in the constitution footer), write
   **`OS-MANIFEST.lock`** (future upgrades three-way diff against it), and install **the door**
   (the OS report-back standing instruction);
@@ -66,10 +68,10 @@ point at those sources, never copy them.
 
 ## 4 · What a healthy install looks like
 
-Constitution boots with your rules + the footer stamp · STATUS reflects reality · (solo/team)
-skills answer as `/scope-lock` etc. and the hooks are live after a session restart · the lock
-file exists · no unfilled placeholders · the image folder is gone. The solo/team prompts end
-with an honest report of exactly this.
+Constitution boots with your rules + the footer stamp · STATUS reflects reality · (solo)
+skills answer as `/scope-lock` in Claude and/or `$scope-lock` in Codex · the selected hooks are
+live after restart (and Codex `/hooks` trust review) · the lock file exists · no unfilled
+placeholders · the image folder is gone. The prompts end with an honest report of exactly this.
 
 ## 5 · Staying current
 
