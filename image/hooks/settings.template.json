@@ -1,0 +1,43 @@
+{
+  "//": "documentation-as-os :: REFERENCE hook + permission config. MERGE into .claude/settings.json. Verify the exact schema/patterns against the live Claude Code docs and TEST in the bootstrap dogfood run before relying on it. Scripts assume .claude/hooks/ and must be chmod +x.",
+
+  "permissions": {
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git rebase:*)",
+      "Bash(rm -rf:*)",
+      "Bash(*DROP *)",
+      "Bash(*DELETE *)",
+      "Bash(*TRUNCATE *)"
+    ]
+  },
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/post-edit-docs.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-gate.sh" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+# The docs-contract gate — the same validator agents run locally, as a required check.
+# A FAIL here means the contract is broken (frontmatter, links, scope, structure, placeholders).
+# The weekly cron closes the idle-silence gap: an untouched corpus still reports its drift.
+name: validate-docs
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly — drift must surface even when nobody pushes
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the docs validator
+        run: python3 scripts/validate_docs.py
+# After the first run, mark the "validate" check REQUIRED in your branch ruleset.

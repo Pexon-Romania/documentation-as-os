@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Help operating YOUR instance (install questions, filling your constitution)
+    url: https://github.com/flaviusmoldovan-pexon/documentation-as-os/blob/main/GETTING-STARTED.md
+    about: This inbox is for the OS itself. Instance operation starts at GETTING-STARTED; your instance's own constitution and skills carry the rest.
+  - name: The method in one read
+    url: https://github.com/flaviusmoldovan-pexon/documentation-as-os/blob/main/METHOD.md
+    about: What the OS is and why — before proposing, check the idea isn't already load-bearing.

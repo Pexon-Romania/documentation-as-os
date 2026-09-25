@@ -1,0 +1,18 @@
+# Selective ownership — scalable by design.
+#  • The MACHINERY routes through the steward: the image (what instances install), the gates,
+#    and the protocol files that define how this repo works.
+#  • Everything else (METHOD, ADOPTERS, CHANGELOG content) needs one peer review per the
+#    ruleset — no single-person bottleneck on prose.
+# Succession: when a maintainer team exists, swap the handle for @flaviusmoldovan-pexon
+# (a one-line change; ownership follows the role, not the person).
+
+/image/                  @flaviusmoldovan-pexon
+/scripts/                @flaviusmoldovan-pexon
+/.github/                @flaviusmoldovan-pexon
+/CLAUDE.md               @flaviusmoldovan-pexon
+/AGENTS.md               @flaviusmoldovan-pexon
+/README.md               @flaviusmoldovan-pexon
+/CONTRIBUTING.md         @flaviusmoldovan-pexon
+/MAINTAINERS.md          @flaviusmoldovan-pexon
+/GETTING-STARTED.md      @flaviusmoldovan-pexon
+/UPGRADING.md            @flaviusmoldovan-pexon

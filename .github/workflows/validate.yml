@@ -1,0 +1,38 @@
+# The product repo's contract, enforced on every push/PR — a red check means the change
+# isn't done (CLAUDE.md §2.6). Weekly cron: an untouched repo must still tell us when
+# something rots, and the Monday run doubles as the triage-cadence reminder.
+name: validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Repo contract (tree · links · template-lint · truth-check · version)
+        run: python3 scripts/validate_repo.py
+
+      - name: Image manifest is fresh
+        run: python3 scripts/gen_manifest.py --check
+
+      - name: Bootstrap smoke (the install path, mechanically)
+        run: bash scripts/smoke_bootstrap.sh
+
+      - name: Changelog guard (image/scripts changes need a CHANGELOG entry)
+        if: github.event_name == 'pull_request'
+        run: |
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)
+          echo "$CHANGED"
+          if echo "$CHANGED" | grep -qE '^(image|scripts)/' && ! echo "$CHANGED" | grep -qx 'CHANGELOG.md'; then
+            echo "::error::image/ or scripts/ changed without a CHANGELOG.md entry — see CONTRIBUTING.md"
+            exit 1
+          fi

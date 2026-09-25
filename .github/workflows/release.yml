@@ -1,0 +1,57 @@
+# On a version tag: verify the tag matches image/VERSION, package the image alone as the
+# consumable asset, and create the Release. After it runs, edit the Release notes to lead
+# with "Impact on existing instances" (CONTRIBUTING §releasing) — never tag red: the live
+# agent-run bootstrap pass comes BEFORE the tag.
+name: release
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tag must match image/VERSION
+        run: |
+          V="$(tr -d '[:space:]' < image/VERSION)"
+          if [ "v$V" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} != image/VERSION v$V — bump VERSION (and its CHANGELOG heading) first"
+            exit 1
+          fi
+
+      - name: Gates (same as validate)
+        run: |
+          python3 scripts/validate_repo.py
+          python3 scripts/gen_manifest.py --check
+          bash scripts/smoke_bootstrap.sh
+
+      - name: Stamp + package the image
+        run: |
+          {
+            echo "documentation-as-os image"
+            echo "version: ${GITHUB_REF_NAME}"
+            echo "built:   $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "commit:  ${GITHUB_SHA}"
+            echo "run:     ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          } > image/BUILD.txt
+          cat image/BUILD.txt
+          {
+            echo "documentation-as-os ${GITHUB_REF_NAME} — START HERE"
+            echo "Open image/BOOTSTRAP.md and pick your profile (poc · solo · team)."
+            echo "Full walk-through: GETTING-STARTED.md at https://github.com/flaviusmoldovan-pexon/documentation-as-os"
+          } > START-HERE.txt
+          zip -r "image-${GITHUB_REF_NAME}.zip" image START-HERE.txt
+
+      - name: Create the Release with the image asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "image-${GITHUB_REF_NAME}.zip" \
+            --title "documentation-as-os ${GITHUB_REF_NAME}" \
+            --notes "**Impact on existing instances:** _edit me — what must an instance on the previous version do?_ See CHANGELOG.md for the changes."

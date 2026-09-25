@@ -1,0 +1,17 @@
+# Selective ownership — scalable by design.
+#  • CONTENT docs need ONE peer approval from any write collaborator — no single-person
+#    bottleneck. Deliberately NOT listed here.
+#  • The SYSTEM layer below additionally requires the steward's review: these files define
+#    how the system works (enforcement, protocol, structure map, standards, scope boundary).
+#  • The machine-generated manifest is deliberately unowned — it regenerates on every change.
+# Point at a TEAM (@your-org/your-docs-maintainers), never a person — ownership must transfer
+# with a membership change, not a file change.
+
+/scripts/                   @your-org/your-docs-maintainers
+/.github/                   @your-org/your-docs-maintainers
+/AGENTS.md                  @your-org/your-docs-maintainers
+/CLAUDE.md                  @your-org/your-docs-maintainers
+/README.md                  @your-org/your-docs-maintainers
+/DOCS-STANDARD.md           @your-org/your-docs-maintainers
+/DOCS-SYSTEM.md             @your-org/your-docs-maintainers
+/delivery/CONVENTIONS.md    @your-org/your-docs-maintainers
