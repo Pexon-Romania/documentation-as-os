@@ -6,6 +6,12 @@
 
 ## Unreleased
 
+## v2.3.0 — 2026-09-25 · Codex runtime adapter
+
+**Impact on existing instances:** existing Claude-only instances can continue unchanged. To
+add Codex support, place this Release's `image/` beside the instance and run
+`image/UPGRADE.md`; choose Codex or both runtimes when prompted.
+
 - **Codex runtime adapter (maintainer-run evidence, 2026-09-25):** operating the method from
   Codex exposed that the solo image could specify the portable hook contract but only install
   Claude Code wiring. The bootstrap now asks `Claude Code` / `Codex` / `both` without inferring;
