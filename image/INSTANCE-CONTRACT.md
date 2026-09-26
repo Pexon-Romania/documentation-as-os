@@ -15,7 +15,8 @@
 | Live current-state | `docs/delivery/STATUS.md` | all |
 | Doc-debt register (graceful-enforcement ledger) | `docs/delivery/doc-debt.md` | solo · team |
 | Append-only shipped record | `docs/delivery/CHANGELOG.md` | all |
-| Decisions (the *why*, append-only) | `docs/delivery/decisions/` + memory | solo · team |
+| Decisions (the *why*, append-only; memory may point here) | `docs/delivery/decisions/` | solo · team |
+| Portable project memory (experience index; canonical truth remains in its owning docs) | `memory/MEMORY.md` | solo |
 | Router map (≤3 hops entrance) | `README.md` | team |
 | Working protocol | `AGENTS.md` | team |
 | Delivery line | `delivery/` — `CONVENTIONS` · `WORK_TRACKER` · `CHANGELOG` · `LEARNINGS` | team |
@@ -69,11 +70,14 @@
   root) — the sha256 manifest instantiated from, and **the door** (the OS report-back section in
   the constitution; `[OS]` header in LEARNINGS on team). The installer folder is removed after
   verification.
+- The solo bootstrap writes **`memory/MEMORY.md`** from the image template. Runtime-native memory
+  may supplement it but does not replace the portable, Git-tracked project memory.
 - `image/MANIFEST.json` maps every template file → sha256, per release — the basis of the
   three-way upgrade diff (new manifest vs your lock vs your files).
 
 ### Vocabulary (core terms keep their meaning)
 constitution · the loop · scope-lock · doc-debt · graceful enforcement · learnings inbox ·
+project memory ·
 `[VERIFIED]`/`[INFERRED]`/`[NEEDS-CHECK]` · "the code wins" · "code is never evidence for
 environment state."
 

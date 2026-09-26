@@ -16,6 +16,7 @@ fail() { echo "SMOKE FAIL: $*" >&2; exit 1; }
 for f in VERSION MANIFEST.json BOOTSTRAP.md UPGRADE.md INSTANCE-CONTRACT.md \
          CONSTITUTION.template.md SELF-ENFORCEMENT.md \
          skeleton/SKELETON.md skeleton/STATUS.template.md skeleton/doc-debt.template.md \
+         skeleton/MEMORY.template.md \
          hooks/settings.template.json hooks/session-start.sh hooks/post-edit-docs.sh hooks/stop-gate.sh \
          hooks/codex/hooks.template.json hooks/codex/common.py hooks/codex/session_start.py \
          hooks/codex/post_edit_docs.py hooks/codex/stop_gate.py \
@@ -36,13 +37,14 @@ grep -q "$DOOR" "$IMG/BOOTSTRAP.md" || fail "BOOTSTRAP.md carries no upstream do
 echo "smoke 0/3: image complete"
 
 # ── Part 1 · solo-profile BOTH-runtimes install (what STEP 1-6 produce, scripted) ──
-S="$W/solo"; mkdir -p "$S/docs/delivery" "$S/.claude/hooks" "$S/.codex/hooks"
+S="$W/solo"; mkdir -p "$S/docs/delivery" "$S/memory" "$S/.claude/hooks" "$S/.codex/hooks"
 sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/CONSTITUTION.template.md" > "$S/CLAUDE.md"
 VER="$(tr -d '[:space:]' < "$IMG/VERSION")"
 { printf '\n## OS report-back (standing)\nOS-level findings: draft the upstream issue at %s/issues/new (os-bug | improvement | suggestion), include the image version + profile from the footer stamp; un-filed drafts live under "## OS findings (to file upstream)" in STATUS.\n' "$DOOR"
   printf '\n<!-- documentation-as-os · image %s · profile: solo · installed %s · upstream: %s -->\n' "$VER" "$(date +%F)" "$DOOR"; } >> "$S/CLAUDE.md"
 sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/skeleton/STATUS.template.md" > "$S/docs/delivery/STATUS.md"
 sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/skeleton/doc-debt.template.md" > "$S/docs/delivery/doc-debt.md"
+sed -E 's/\{\{[^}]*\}\}/X/g' "$IMG/skeleton/MEMORY.template.md" > "$S/memory/MEMORY.md"
 for s in scope-lock workstream handover reconcile-docs gating; do
   mkdir -p "$S/.claude/skills/$s"; cp "$IMG/skills/$s/SKILL.md" "$S/.claude/skills/$s/"
   mkdir -p "$S/.agents/skills/$s"; cp "$IMG/skills/$s/SKILL.md" "$S/.agents/skills/$s/"
@@ -61,11 +63,16 @@ grep -q '"files"' "$S/docs/OS-MANIFEST.lock" || fail "solo: lock missing/empty"
 python3 -m json.tool "$S/.codex/hooks.json" >/dev/null || fail "solo: Codex hooks.json invalid"
 [ -f "$S/.codex/hooks/stop_gate.py" ] || fail "solo: Codex Stop handler missing"
 [ -f "$S/.agents/skills/scope-lock/SKILL.md" ] || fail "solo: Codex skills missing"
+[ -f "$S/memory/MEMORY.md" ] || fail "solo: portable project memory missing"
+[ "$(sed -n '1,30p' "$S/memory/MEMORY.md" | grep -c 'Hot index')" -eq 1 ] || fail "solo: memory hot index is not in the injected head"
 # the stop-gate must run against the fresh instance and allow a clean stop (no debt)
 ( cd "$S" && CLAUDE_PROJECT_DIR="$S" bash .claude/hooks/stop-gate.sh </dev/null >/dev/null 2>&1 ) || fail "solo: stop-gate errored on a clean instance"
+CLAUDE_BOOT="$(cd "$S/docs" && CLAUDE_PROJECT_DIR="$S" bash "$S/.claude/hooks/session-start.sh")"
+echo "$CLAUDE_BOOT" | grep -q "Hot index" || fail "solo: Claude SessionStart did not inject the memory hot index"
 # Codex adapter lifecycle: boot context, edit nudge, relaxed debt, strict block once.
 BOOT="$(cd "$S/docs" && printf '{"cwd":"%s","source":"startup"}' "$S" | python3 "$(git rev-parse --show-toplevel)/.codex/hooks/session_start.py")"
 echo "$BOOT" | grep -q "STATUS" || fail "solo: Codex SessionStart did not inject STATUS"
+echo "$BOOT" | grep -q "Hot index" || fail "solo: Codex SessionStart did not inject the memory hot index"
 CODEX_EDIT_EVENT="{\"cwd\":\"$S\",\"tool_input\":{\"command\":\"*** Begin Patch\\n*** Update File: src/app.py\\n*** End Patch\"}}"
 NUDGE="$(printf '%s' "$CODEX_EDIT_EVENT" | python3 "$S/.codex/hooks/post_edit_docs.py")"
 echo "$NUDGE" | grep -q "docs-part-of-done" || fail "solo: Codex PostToolUse did not nudge"

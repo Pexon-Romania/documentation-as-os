@@ -13,9 +13,14 @@ Before ANY work, read — in order:
 1. **This file** — the rules + locked decisions.
 2. **`{{STATUS_DOC}}`** (e.g. `docs/delivery/STATUS.md`) — where we are · what's next · what's blocked · **open doc-debt**.
 3. **The doc for the area you're touching** (in `{{DOCS_LOCATION}}`).
-4. **Project memory** (`{{MEMORY_LOCATION}}`) — durable decisions + learnings.
+4. **Project memory** (`{{MEMORY_LOCATION}}`) — a small index of useful outcomes, failed paths,
+   corrections, and pointers to canonical docs.
 
 Don't start work until you know the current state and the task. *(The `SessionStart` hook surfaces 2–4 automatically; if it didn't fire, read them yourself.)*
+
+For a related non-trivial task, search project memory by area, command, error signature, and tag;
+load only the few relevant entries. Memory is not authority — verify its pointer against code,
+the relevant doc, or dated environment evidence before relying on it.
 
 **Reconcile, don't just read:** if `{{STATUS_DOC}}` carries a forward-looking line ("do X next session", "restart to activate"), check whether it already happened and fix it on the spot — a `Last verified` date doesn't make a future-tense claim true.
 
@@ -56,7 +61,13 @@ A change isn't complete until the **code** works, the **docs** reflect it, and t
 - Commit messages: **one short imperative line — no AI co-author trailers, ever.**
 
 ## 7 · Write-out before you stop
-Update `{{STATUS_DOC}}` (where we are + next step), append a session note **to memory (`## Session log`)**, record any decision in memory (**append-only — never lose the *why***), and clear or log any doc-debt — **a forward-looking commitment ("do X next session") is logged as a `- [ ]` doc-debt item *when you write it*, so the gates track it, not your memory.** **If it mattered this session, it's written before the session ends.** *(The `Stop` hook checks this — gracefully.)*
+Update `{{STATUS_DOC}}` (where we are + next step). Add a memory episode only for a consequential
+outcome, failed path worth avoiding, correction, or reusable-method candidate; link the canonical
+docs instead of copying them. Record decisions in ADRs (**append-only — never lose the *why***),
+then point memory at the ADR. Clear or log any doc-debt — **a forward-looking commitment ("do X
+next session") is logged as a `- [ ]` doc-debt item *when you write it*, so the gates track it,
+not your memory.** **If it mattered this session, it's written before the session ends.** *(The
+`Stop` hook checks this — gracefully.)*
 
 ## 8 · Locked decisions (do not silently change)
 > To change one, it's deliberate — never silent: record it in a **superseding ADR** and update

@@ -40,6 +40,16 @@ promoted from artifact to operating system, literally:
    one word**, logs the skip as *doc-debt*, and helps you reconcile it later. Enforcement that
    adapts is enforcement that stays switched on.
 
+### What “memory” means here
+
+Memory stays deliberately small: a project-scoped index of consequential outcomes, failed paths,
+corrections, and reusable-method candidates, with links to canonical evidence. It is not a second
+knowledge base. STATUS owns current work; ADRs own decisions; the environment register owns dated
+environment facts; CHANGELOG owns shipped history; skills own proven procedures. Before related
+work the agent retrieves only the few relevant entries; after work it records only what should
+change future behavior. Routine entries are summarized or removed from the active file after
+review, while Git preserves the history. No database, embeddings, or background service is needed.
+
 ```
 Request → Decision recorded → Docs updated → Agent reads docs → Build → Verify → Ship → Docs updated
                             ↳ and the whole loop re-runs whenever requirements move ↲

@@ -18,5 +18,8 @@ Build the handover set **from the code**, not from stale notes.
    not yet filed upstream? List them now with their prefilled issue links (per the
    constitution's OS report-back section) — a missed report may survive a session, never a
    handover.
+7. **Reconcile project memory:** verify the hot-index pointers for the handed-over area, surface
+   unresolved conflicts, summarize duplicate episodes, and retire stale routine entries. Decisions
+   remain in ADRs; never turn memory into a second source of truth.
 
 A user-facing AI tool reads the **product** bucket only — never engineering, delivery, or the constitution.
