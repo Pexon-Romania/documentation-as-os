@@ -6,6 +6,13 @@
 
 ## Unreleased
 
+## v2.4.0 — 2026-09-26 · portable project memory
+
+**Impact on existing instances:** `poc` and `team` instances are unchanged. Existing `solo`
+instances should place this Release's `image/` beside the instance and run `image/UPGRADE.md` to
+install `memory/MEMORY.md`, update the constitution's memory contract, and refresh the selected
+SessionStart adapter. Runtime-native memory may remain as a supplement.
+
 - **Portable project memory (maintainer-run v2.3.0 solo bootstrap audit, 2026-09-26):** the
   SessionStart adapters promised a memory index, but the fresh solo path created no
   `memory/MEMORY.md` and silently fell back to runtime-native memory. Solo now installs one small,
@@ -15,6 +22,12 @@
   truth stays in STATUS, ADRs, environment evidence, CHANGELOG, and skills. Existing
   `reconcile-docs` and `handover` maintain the lifecycle, and smoke coverage proves fresh installs
   inject the index. No database, embeddings, cron, or new service.
+- **Repository-transfer housekeeping:** adopter-facing download, stamp, upgrade, report-back,
+  registration, walkthrough, and release-package links now use the current
+  `Pexon-Romania/documentation-as-os` home. The personal maintainer handle is unchanged.
+- **Live release-audit fix:** the solo verification step now distinguishes unresolved installer
+  placeholders from the intentional fields in `0000-adr-template.md`; bootstrap smoke now installs
+  and checks that ADR template instead of silently omitting it.
 
 ## v2.3.0 — 2026-09-25 · Codex runtime adapter
 

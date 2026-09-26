@@ -9,7 +9,7 @@
 
 ## How to use
 
-1. Get the **latest Release** of `flaviusmoldovan-pexon/documentation-as-os` (record the tag) and place its
+1. Get the **latest Release** of `Pexon-Romania/documentation-as-os` (record the tag) and place its
    `image/` beside your repo.
 2. Open a runtime already named by the instance (`Claude Code` or `Codex`) and paste the prompt.
    It reports before it writes.
@@ -66,7 +66,7 @@ STEP 4 · Re-stamp + re-lock. Append a NEW stamp line to the constitution footer
   install history, never overwrite — in EXACTLY this format (the census and the next upgrade's
   STEP 0 parse it):
   "<!-- documentation-as-os · image <new version> · profile: <same> · upgraded <today>
-  (from <old version>) · upstream: https://github.com/flaviusmoldovan-pexon/documentation-as-os -->".
+  (from <old version>) · upstream: https://github.com/Pexon-Romania/documentation-as-os -->".
   Replace the lock with the NEW image/MANIFEST.json. Log one line in the instance CHANGELOG
   ("docs-as-os image upgraded <old> → <new>: <what changed here>").
 

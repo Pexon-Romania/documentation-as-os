@@ -43,7 +43,7 @@ jobs:
           {
             echo "documentation-as-os ${GITHUB_REF_NAME} — START HERE"
             echo "Open image/BOOTSTRAP.md and pick your profile (poc · solo · team)."
-            echo "Full walk-through: GETTING-STARTED.md at https://github.com/flaviusmoldovan-pexon/documentation-as-os"
+            echo "Full walk-through: GETTING-STARTED.md at https://github.com/Pexon-Romania/documentation-as-os"
           } > START-HERE.txt
           zip -r "image-${GITHUB_REF_NAME}.zip" image START-HERE.txt
 
