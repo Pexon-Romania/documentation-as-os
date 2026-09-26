@@ -6,6 +6,16 @@
 
 ## Unreleased
 
+- **Portable project memory (maintainer-run v2.3.0 solo bootstrap audit, 2026-09-26):** the
+  SessionStart adapters promised a memory index, but the fresh solo path created no
+  `memory/MEMORY.md` and silently fell back to runtime-native memory. Solo now installs one small,
+  Git-tracked memory template with a hot index, evidence/confidence fields, relevant-only
+  retrieval, explicit ownership boundaries, conflict handling, skill-candidate promotion, and
+  review-based forgetting. Runtime-native memory may supplement but not replace it; canonical
+  truth stays in STATUS, ADRs, environment evidence, CHANGELOG, and skills. Existing
+  `reconcile-docs` and `handover` maintain the lifecycle, and smoke coverage proves fresh installs
+  inject the index. No database, embeddings, cron, or new service.
+
 ## v2.3.0 — 2026-09-25 · Codex runtime adapter
 
 **Impact on existing instances:** existing Claude-only instances can continue unchanged. To

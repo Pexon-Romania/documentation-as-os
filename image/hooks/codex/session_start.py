@@ -37,7 +37,7 @@ debt = excerpt(root / "docs" / "delivery" / "doc-debt.md", 10000, "")
 open_items = [line for line in debt if line.startswith("- [ ]")][:20]
 lines.extend(open_items or ["(none)"])
 lines.append("--- memory index ---")
-lines.extend(excerpt(root / "memory" / "MEMORY.md", 30, "(using the runtime's native memory)"))
+lines.extend(excerpt(root / "memory" / "MEMORY.md", 30, "(memory/MEMORY.md missing - repair the solo install)"))
 lines.append("=== end boot ===")
 
 # SessionStart accepts plain stdout as additional developer context.

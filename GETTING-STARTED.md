@@ -68,8 +68,9 @@ point at those sources, never copy them.
 
 ## 4 · What a healthy install looks like
 
-Constitution boots with your rules + the footer stamp · STATUS reflects reality · (solo)
-skills answer as `/scope-lock` in Claude and/or `$scope-lock` in Codex · the selected hooks are
+Constitution boots with your rules + the footer stamp · STATUS reflects reality · (solo:
+`memory/MEMORY.md` exists with its small hot index and no copied raw history; skills answer as
+`/scope-lock` in Claude and/or `$scope-lock` in Codex) · the selected hooks are
 live after restart (and Codex `/hooks` trust review) · the lock file exists · no unfilled
 placeholders · the image folder is gone. The prompts end with an honest report of exactly this.
 

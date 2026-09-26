@@ -23,7 +23,7 @@ echo "--- open doc-debt (reconcile with /reconcile-docs) ---"
 grep -E '^- \[ \]' "$ROOT/docs/delivery/doc-debt.md" 2>/dev/null | head -20 || echo "(none)"
 
 echo "--- memory index ---"
-sed -n '1,30p' "$ROOT/memory/MEMORY.md" 2>/dev/null || echo "(using the runtime's native memory)"
+sed -n '1,30p' "$ROOT/memory/MEMORY.md" 2>/dev/null || echo "(memory/MEMORY.md missing — repair the solo install)"
 
 echo "=== end boot ==="
 exit 0

@@ -20,7 +20,8 @@ docs/
     CHANGELOG.md        ← append-only · what shipped
     decisions/          ← ADRs — the *why*
     doc-debt.md         ← open doc-debt register (from ./doc-debt.template.md)
-memory/  (or the runtime's native memory)   ← durable *why* across sessions
+memory/
+  MEMORY.md          ← small project-scoped experience index (from ./MEMORY.template.md)
 ```
 
 ## Per-file role + how the bootstrap fills it
@@ -35,17 +36,21 @@ memory/  (or the runtime's native memory)   ← durable *why* across sessions
 | `STATUS` | where we are · next · blocked · doc-debt | seeded "Phase 0" | seeded from current reality |
 | `CHANGELOG` | shipped, append-only | empty | optionally seeded from git history |
 | `decisions/` | ADRs (the why) | `0000-adr-template.md` (from `./adr.template.md`) | + seed the obvious past decisions |
+| `memory/MEMORY.md` | outcomes, failed paths, corrections + pointers to canonical truth | empty hot index + entry contract | seed only verified, reusable experience — never copy docs |
 | `support/*` | onboarding pack | stubs with `[FILL IN]` (owner · SLAs · contacts) | same |
 | `doc-debt` | skipped updates to reconcile | empty | empty |
 
 ## Rules the skeleton obeys
 
-- **Minimum for the stage — THIS RULE WINS over the tree above** — create only what the project needs now; the loop adds the rest. Optional subsets: the **support-pack** when a support audience exists; the **registers** (known-limitations · bugs · releases · faq) on their first real entry. A tiny project starts with overview · areas-map · the delivery trio · memory.
+- **Minimum for the stage — THIS RULE WINS over the tree above** — create only what the project needs now; the loop adds the rest. Optional subsets: the **support-pack** when a support audience exists; the **registers** (known-limitations · bugs · releases · faq) on their first real entry. A tiny project starts with overview · areas-map · the delivery trio · `memory/MEMORY.md`.
 - **Routing:** a user-facing AI is pointed at `docs/product/` only — never engineering, delivery, or the constitution.
 - **Registers carry open items only** — `known-limitations`, `bugs`, `doc-debt`: resolved items are removed.
 - **`doc-debt.md`** is the graceful-enforcement ledger — skipped doc updates land here, the
   `SessionStart` hook surfaces them, and the `reconcile-docs` skill clears them.
 - **Board = index, docs = records** — `STATUS` and registers stay scannable; heavy detail lives in the linked docs they point to.
+- **Memory = experience + pointers, not duplicated truth** — current work stays in STATUS,
+  decisions in ADRs, environment facts in the environment register, and repeatable methods in
+  skills. Runtime-native memory may cache this context, but never replaces the Git-tracked file.
 - **Never written anywhere here:** credentials, hostnames, PII, the internal way-of-working.
 
 ---

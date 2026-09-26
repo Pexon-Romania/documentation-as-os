@@ -42,8 +42,10 @@ STEP 1 · Constitution-lite. At the runtime-selected boot location, if ./CLAUDE.
   constitution takes CLAUDE.md, keep @AGENTS.md as its first line, never edit AGENTS.md). Otherwise create the selected boot file as a SHORT constitution from
   image/CONSTITUTION.template.md keeping only: §1 boot (read this file + STATUS every
   session), §2 critical rules, §5 done = code + docs in sync (manual — no hooks in this
-  profile), §7 write-out before you stop. Fill every {{PLACEHOLDER}} you keep; ask for what
-  you can't infer. Do not invent. DELETE the template's instructional header comment.
+  profile), §7 write-out before you stop. Because POC has no project-memory file, remove the
+  memory read/search/write clauses from §1 and §7 instead of leaving a broken pointer. Fill
+  every {{PLACEHOLDER}} you keep; ask for what you can't infer. Do not invent. DELETE the
+  template's instructional header comment.
 
 STEP 2 · Live state. Create docs/delivery/STATUS.md from image/skeleton/STATUS.template.md
   and docs/delivery/CHANGELOG.md (append-only, empty). That's the whole poc doc-set.
@@ -106,8 +108,8 @@ STEP 1 · Constitution.
   canonical boot file (and create the import-only CLAUDE.md for `both`).
   Fill every {{PLACEHOLDER}}: infer what you safely can from the repo (name, stack,
   source-of-truth, environments); ASK me for what you can't (locked decisions, domain rules,
-  forbidden ops). Do not invent. DELETE the template's instructional header comment — installer
-  text never ships in a live constitution.
+  forbidden ops). Set `{{MEMORY_LOCATION}}` to `memory/MEMORY.md`. Do not invent. DELETE the
+  template's instructional header comment — installer text never ships in a live constitution.
   PLATFORM-PROVISIONED REPO (e.g. Bench/FitKit: CLAUDE.md is an @AGENTS.md import and AGENTS.md
   is the platform's repository guide): the constitution TAKES CLAUDE.md and keeps @AGENTS.md as
   its FIRST line (the import loads the platform guide every session — never fork or edit
@@ -124,7 +126,11 @@ STEP 2 · Skeleton.
   this stage doesn't need (the support-pack and empty registers are optional subsets).
   Create docs/delivery/STATUS.md from STATUS.template.md, docs/delivery/doc-debt.md from
   skeleton/doc-debt.template.md, and docs/delivery/decisions/0000-adr-template.md from
-  skeleton/adr.template.md. FRESH = guided stubs; EXISTING = filled in STEP 5.
+  skeleton/adr.template.md. Create memory/MEMORY.md from skeleton/MEMORY.template.md and keep
+  its hot index within the first 30 lines (the SessionStart adapters inject only that head).
+  Runtime-native memory may supplement this file, never replace it: the Git-tracked file is the
+  portable project memory across runtimes. FRESH = empty index + guided stubs; EXISTING = seed
+  only verified outcomes and pointers in STEP 5 — never copy raw histories or documents.
 
 STEP 3 · Skills.
   Install the five skills (scope-lock, workstream, handover, reconcile-docs, gating) for the
@@ -176,10 +182,12 @@ STEP 7 · Start the loop.
   scope-lock skill on the first real task. Update STATUS (where we are / next).
 
 STEP 8 · Verify, then remove the installer.
-  Check: one canonical constitution + skeleton + the selected runtime skills/hooks in place,
+  Check: one canonical constitution + skeleton + memory/MEMORY.md + the selected runtime
+  skills/hooks in place,
   os-mode = strict, no unfilled {{PLACEHOLDER}}, stamp/lock/door present. Exercise each selected
-  adapter: SessionStart injects state; a synthetic code edit produces a nudge; relaxed mode logs
-  debt; strict Stop blocks once and honors stop_hook_active. Then DELETE the image folder you installed from
+  adapter: SessionStart injects STATUS, doc-debt, and the memory hot index; a synthetic code edit
+  produces a nudge; relaxed mode logs debt; strict Stop blocks once and honors stop_hook_active.
+  Then DELETE the image folder you installed from
   (ask me first if it sits inside this repo's tree) — a kept image copy becomes a
   silently-stale fork; upgrades come from the next Release via image/UPGRADE.md.
 
