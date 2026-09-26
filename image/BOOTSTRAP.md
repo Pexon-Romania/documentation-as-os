@@ -10,7 +10,7 @@
 
 ## How to use
 
-1. **Get the latest Release** of `flaviusmoldovan-pexon/documentation-as-os` (the `image-…zip` asset is the
+1. **Get the latest Release** of `Pexon-Romania/documentation-as-os` (the `image-…zip` asset is the
    image alone; the source archive works too). **Record the tag you took.** Never install from
    a copied folder or `main` — version-truth lives in Releases.
 2. Place the `image/` folder at/beside the target repo root.
@@ -52,12 +52,12 @@ STEP 2 · Live state. Create docs/delivery/STATUS.md from image/skeleton/STATUS.
 
 STEP 3 · Stamp + lock + door. (a) Append to the constitution footer:
   "<!-- documentation-as-os · image <version from image/VERSION> · profile: poc ·
-  installed <today> · upstream: https://github.com/flaviusmoldovan-pexon/documentation-as-os -->".
+  installed <today> · upstream: https://github.com/Pexon-Romania/documentation-as-os -->".
   (b) Copy image/MANIFEST.json to docs/OS-MANIFEST.lock (future upgrades diff against it).
   (c) Add this standing section to the constitution:
   "## OS report-back (standing) — when the OS itself misbehaves (a rule contradicts itself,
   a template is wrong, friction in the method): DRAFT the upstream issue immediately —
-  prefill https://github.com/flaviusmoldovan-pexon/documentation-as-os/issues/new with the matching
+  prefill https://github.com/Pexon-Romania/documentation-as-os/issues/new with the matching
   template (os-bug | improvement | suggestion), the image version + profile from the footer
   stamp, and the finding — and hand me the link to file. If I don't file it now, record the
   draft under '## OS findings (to file upstream)' in STATUS so it survives the session."
@@ -69,7 +69,7 @@ STEP 4 · Verify, then remove the installer. Check: constitution boots, STATUS +
   fork.
 
 STEP 5 · Register (optional, zero-duty) + report. Offer me the prefilled adoption-
-  registration link — https://github.com/flaviusmoldovan-pexon/documentation-as-os/issues/new with the
+  registration link — https://github.com/Pexon-Romania/documentation-as-os/issues/new with the
   "Adopted" template, instance name + profile + image version filled — one click puts this
   instance on the estate view; skipping changes nothing. Then report honestly: what you
   installed, every placeholder you filled vs left for me, what you could not verify.
@@ -163,14 +163,14 @@ STEP 5 · EXISTING mode only — build the docs FROM the code.
 STEP 6 · Stamp + lock + door.
   (a) Append to the constitution footer: "<!-- documentation-as-os · image <version from
   image/VERSION> · profile: solo · installed <today> · upstream:
-  https://github.com/flaviusmoldovan-pexon/documentation-as-os -->".
+  https://github.com/Pexon-Romania/documentation-as-os -->".
   (b) Copy image/MANIFEST.json to docs/OS-MANIFEST.lock (upgrades diff against it).
   (c) Add this standing section to the constitution:
   "## OS report-back (standing) — when the OS itself misbehaves (a hook misfires, a gate
   blocks wrongly, a template/skill contradicts itself): the test is 'is the problem in a
   file the bootstrap installed, or a rule this constitution carries?' If yes it's OS-level:
   record it as an '[OS]' line under '## OS findings (to file upstream)' in STATUS, DRAFT the
-  upstream issue (prefill https://github.com/flaviusmoldovan-pexon/documentation-as-os/issues/new with the
+  upstream issue (prefill https://github.com/Pexon-Romania/documentation-as-os/issues/new with the
   matching template — os-bug | improvement | suggestion — plus the image version + profile
   from the footer stamp and the finding), and hand the human the link. /handover and the
   stop-gate surface un-filed [OS] findings."
@@ -184,7 +184,9 @@ STEP 7 · Start the loop.
 STEP 8 · Verify, then remove the installer.
   Check: one canonical constitution + skeleton + memory/MEMORY.md + the selected runtime
   skills/hooks in place,
-  os-mode = strict, no unfilled {{PLACEHOLDER}}, stamp/lock/door present. Exercise each selected
+  os-mode = strict, no unresolved installer placeholders in instantiated content (the fields in
+  `decisions/0000-adr-template.md` are intentionally left for future ADRs), stamp/lock/door present.
+  Exercise each selected
   adapter: SessionStart injects STATUS, doc-debt, and the memory hot index; a synthetic code edit
   produces a nudge; relaxed mode logs debt; strict Stop blocks once and honors stop_hook_active.
   Then DELETE the image folder you installed from
@@ -237,10 +239,10 @@ STEP 2 · System layer. scripts/validate_docs.py from image/system/validate_docs
 
 STEP 3 · Stamp + lock + door. (a) Append to CLAUDE.md's footer:
   "<!-- documentation-as-os · image <version from image/VERSION> · profile: team ·
-  installed <today> · upstream: https://github.com/flaviusmoldovan-pexon/documentation-as-os -->". (b) Copy image/MANIFEST.json to
+  installed <today> · upstream: https://github.com/Pexon-Romania/documentation-as-os -->". (b) Copy image/MANIFEST.json to
   ./OS-MANIFEST.lock at the repo root. (c) The LEARNINGS template already carries the [OS]
   classification header — that is the door; agents draft upstream issues from [OS] entries
-  (prefill https://github.com/flaviusmoldovan-pexon/documentation-as-os/issues/new with template + image
+  (prefill https://github.com/Pexon-Romania/documentation-as-os/issues/new with template + image
   version + profile) and the human files them.
 
 STEP 4 · The first PR — which is also the working model forever: fresh branch → THE HUMAN runs
