@@ -24,7 +24,7 @@ code wins — and re-stamp).
 **The `[OS]` tag — findings that belong upstream.** The test is mechanical, not judgment: *is
 the problem in a file the bootstrap installed, or a rule the constitution/protocol carries?*
 If yes, it is OS-level — prefix the entry `[OS]`, and the agent DRAFTS the upstream issue in
-the same beat (prefill `https://github.com/flaviusmoldovan-pexon/documentation-as-os/issues/new` with the
+the same beat (prefill `https://github.com/Pexon-Romania/documentation-as-os/issues/new` with the
 matching template — os-bug | improvement | suggestion — plus the image version + profile from
 the boot-file footer stamp and the finding); the human clicks and files. `/handover` and the
 stop-gate surface `[OS]` entries not yet filed. Local-instance learnings stay untagged and are

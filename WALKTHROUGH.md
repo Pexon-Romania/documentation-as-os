@@ -34,7 +34,7 @@ agents, always current — is the documentation. So it gets promoted, literally:
 ## 1.2 The big picture
 
 ```
-            flaviusmoldovan-pexon/documentation-as-os  (the product repo — versioned Releases)
+            Pexon-Romania/documentation-as-os  (the product repo — versioned Releases)
             ┌────────────────────────────────────────────────┐
             │  image/   ── the installable OS                │
             │  issues   ── THE DOOR (the only adopter duty) ◄──────────────┐
@@ -165,7 +165,7 @@ extracted from real instances, never designed by committee*. Adoption is measure
 
 | Home | Audience | Holds |
 |---|---|---|
-| **`flaviusmoldovan-pexon/documentation-as-os`** | every adopter | the image · METHOD · GETTING-STARTED · UPGRADING · the door · Releases |
+| **`Pexon-Romania/documentation-as-os`** | every adopter | the image · METHOD · GETTING-STARTED · UPGRADING · the door · Releases |
 | **`…-hub`** (proprietary, stewarded) | steward + selected contributors | full thesis · evidence register (§A–§H) · decision record (OD-01…14) · rollout |
 | the steward's lane | steward | raw program records |
 
@@ -271,7 +271,7 @@ rides `AGENTS.md`); the MCP mount is a deliberate, token-gated step.
 **A1 · Stage on the Desktop, pull the product from the Release, open the window (terminal):**
 ```bash
 mkdir -p ~/Desktop/docs-os-demo && cd ~/Desktop/docs-os-demo
-gh release download -R flaviusmoldovan-pexon/documentation-as-os -p 'image-*.zip'
+gh release download -R Pexon-Romania/documentation-as-os -p 'image-*.zip'
 unzip -q image-*.zip && rm image-*.zip
 code -n .
 ```
@@ -348,7 +348,7 @@ migrating incrementally. On a Bench/FitKit repo, the same run applies the coexis
 
 | Want to… | Go to |
 |---|---|
-| Adopt (5 min → full) | `flaviusmoldovan-pexon/documentation-as-os` → GETTING-STARTED |
+| Adopt (5 min → full) | `Pexon-Romania/documentation-as-os` → GETTING-STARTED |
 | Understand the method | METHOD.md (5 min) · the hub's thesis (deep) |
 | Report / suggest / register | the repo's issues — the only duty |
 | Stay current | Watch → Releases; upgrades are guided 3-way diffs |
